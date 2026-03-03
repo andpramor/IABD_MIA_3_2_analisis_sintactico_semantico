@@ -40,7 +40,6 @@ print(pd.DataFrame(extracted_entities, columns=["Texto", "Tipo"]).drop_duplicate
 print("\n--- ANÁLISIS DE SENTIMIENTO ---")
 for i, text in enumerate(comments):
     doc = nlp(text)
-    # spacy-textblob añade el atributo extendido ._.blob
     polarity = doc._.blob.polarity
     sentiment_label = (
         "Positivo" if polarity > 0 else "Negativo" if polarity < 0 else "Neutro"
