@@ -4,6 +4,8 @@ from spacytextblob.spacytextblob import (
 )  # Importación necesaria para registrar el componente
 import pandas as pd
 from collections import Counter
+# Los resultados de análisis de sentimiento son malísimos, así que vamos a pasar por traducir a inglés antes del análisis.
+from deep_translator import GoogleTranslator
 
 # --- PASO 1: Preparación ---
 try:
@@ -38,13 +40,16 @@ print(pd.DataFrame(extracted_entities, columns=["Texto", "Tipo"]).drop_duplicate
 
 # --- PASO 4: Análisis de Sentimiento ---
 print("\n--- ANÁLISIS DE SENTIMIENTO ---")
+translator = GoogleTranslator(source='es', target='en')
+
 for i, text in enumerate(comments):
-    doc = nlp(text)
-    polarity = doc._.blob.polarity
-    sentiment_label = (
-        "Positivo" if polarity > 0 else "Negativo" if polarity < 0 else "Neutro"
-    )
-    print(f"Comentario {i+1}: {sentiment_label} (Score: {polarity:.2f})")
+    # Traducimos antes de procesar con spaCy
+    text_en = translator.translate(text)
+    doc_en = nlp(text_en) # Cuidado: nlp debería ser un modelo inglés si quieres ser riguroso
+    
+    polarity = doc_en._.blob.polarity
+    sentiment = "Positivo" if polarity > 0.1 else "Negativo" if polarity < -0.1 else "Neutro"
+    print(f"Comentario {i+1}: {sentiment} (Score EN: {polarity:.2f})")
 
 # --- PASO 5: Tópicos (Estrategia A: Sustantivos) ---
 print("\n--- TÓPICOS PRINCIPALES ---")
