@@ -49,7 +49,7 @@ for i, text in enumerate(comments):
     
     polarity = doc_en._.blob.polarity
     sentiment = "Positivo" if polarity > 0.1 else "Negativo" if polarity < -0.1 else "Neutro"
-    print(f"Comentario {i+1}: {sentiment} (Score EN: {polarity:.2f})")
+    print(f"Comentario {i+1}: {sentiment} (Score: {polarity:.2f})")
 
 # --- PASO 5: Tópicos (Estrategia A: Sustantivos) ---
 print("\n--- TÓPICOS PRINCIPALES ---")
